@@ -1,24 +1,30 @@
-import LoginPage from 'pages/LoginPage.vue'
-import Homepage from 'pages/HomePage.vue'
-
 const routes = [
   {
     path: '/',
-    component: () => import('src/layout/LoginLayout.vue'),
+    component: () => import('layouts/LoginLayout.vue'),
     children: [
 
-      { path: '', name: 'LoginDefault', component: LoginPage },
-      { path: 'LoginPage', name: 'LoginPage', component: LoginPage }
+      { path: '', name: 'LoginDefault', component: () => import('pages/Login.vue') },
+      { path: 'login', name: 'login', component: () => import('pages/Login.vue') },
+      { path: 'register', name: 'register', component: () => import('pages/Register.vue') },
+      { path: 'email-confirmation', name: 'email-confirmation', component: () => import('pages/EmailConfirmation.vue') },
+      { path: 'forgot-password', name: 'forgot-password', component: () => import('pages/ForgotPassword.vue') },
+      { path: 'reset-password', name: 'reset-password', component: () => import('pages/ResetPassword.vue') }
+
     ]
   },
   {
     path: '/',
-    component: () => import('src/pages/LoginPage.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [
 
-      { path: '', name: 'LoginPage', component: LoginPage },
-      { path: '', name: 'HomePage', component: Homepage }
-    ]
+      { path: 'me', name: 'me', component: () => import('pages/Me.vue') }
+      // { patoth: '', component: () => import('pages/Index.vue') }
+
+    ],
+    meta: {
+      requiresAuth: true
+    }
   },
 
   {
