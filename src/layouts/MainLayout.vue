@@ -1,8 +1,3 @@
-import { useQuasar } from 'quasar'
-
-setup () {
-  const $q = useQuasar()
-}
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
@@ -24,7 +19,16 @@ setup () {
           >
         </q-toolbar-title>
 
-        <div>Go Tech v{{ $q.version }}</div>
+        <q-btn-dropdown flat color="white" icon="person" >
+          <q-list>
+            <q-item clickable v-close-popup @click="handleLogout">
+              <q-item-section>
+                <q-item-label>Logout</q-item-label>
+              </q-item-section>
+            </q-item>
+            </q-list>
+        </q-btn-dropdown>
+
       </q-toolbar>
     </q-header>
 
@@ -134,6 +138,13 @@ const linksList = [
   }
 ]
 
+import useAuthUser from 'src/composables/UseAuthUser'
+import { defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
+
+
+
 export default defineComponent({
   name: 'MainLayout',
 
@@ -143,15 +154,28 @@ export default defineComponent({
 
   setup () {
     const leftDrawerOpen = ref(false)
+
+    const $q = useQuasar()
+
     const router = useRouter()
 
-    const navigateTo = (link) => {
-      if (link.route) {
-        router.push({ name: link.route })
-      } else if (link.link) {
-        window.location.href = link.link
-      }
+    const  { logout } = useAuthUser()
+
+    const handleLogout = async () => {
+      $q.dialog({
+        title: 'Logout',
+        message: 'Voce realmente quer sai?',
+        cancel: true,
+        persistent: true,
+      }).onOk(async () => {
+        await logout()
+        router.replace ({ name: 'login'})
+      })
+
+      await logout()
     }
+
+
 
     return {
       essentialLinks: linksList,
@@ -159,7 +183,7 @@ export default defineComponent({
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
-      navigateTo
+      handleLogout
     }
   }
 })

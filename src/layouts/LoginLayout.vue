@@ -1,8 +1,3 @@
-import { useQuasar } from 'quasar'
-
-setup () {
-  const $q = useQuasar()
-}
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
